@@ -11,7 +11,6 @@ namespace SimpleFTP
         [STAThread]
         static void Main()
         {
-            //var i = lst.OrderBy(t => t.MyInt);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());

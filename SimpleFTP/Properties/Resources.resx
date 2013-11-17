@@ -114,4 +114,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DisconnectConfirmation_Text" xml:space="preserve">
+    <value>Are you sure you want to disconnect from current server?</value>
+  </data>
+  <data name="DisconnectConfirmation_Header" xml:space="preserve">
+    <value>Confirm Disconnect</value>
+  </data>
+  <data name="ErrorAlert_Header" xml:space="preserve">
+    <value>Error occured</value>
+  </data>
 </root>
