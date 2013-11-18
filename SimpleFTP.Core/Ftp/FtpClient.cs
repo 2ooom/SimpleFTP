@@ -13,6 +13,13 @@ namespace SimpleFTP.Core.Ftp
         public string ServerUri { get; private set; }
         public bool EnableSsl { get; private set; }
         public event Action<List<FileSystemItem>, string> ListingDirectoryReceived;
+        public event Action<Exception> Eror;
+
+        protected virtual void OnEror(Exception exception)
+        {
+            Action<Exception> handler = Eror;
+            if (handler != null) handler(exception);
+        }
 
         protected virtual void OnListingDirectoryReceived(List<FileSystemItem> fileItems, string path)
         {
@@ -26,7 +33,7 @@ namespace SimpleFTP.Core.Ftp
             {
                 serverUri = serverUri.Substring(0, serverUri.Length - 1);
             }
-            ServerUri = string.Concat("ftp://", serverUri);
+            ServerUri = new UriBuilder(Uri.UriSchemeFtp, serverUri).ToString();
             UserName = userName;
             Password = password;
             EnableSsl = enableSsl;
@@ -36,7 +43,7 @@ namespace SimpleFTP.Core.Ftp
         {
             var request = (FtpWebRequest)WebRequest.Create(ServerUri);
             request.Credentials = new NetworkCredential(UserName, Password);
-            request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            request.Method = WebRequestMethods.Ftp.ListDirectory;
             var ftpstate = new FtpState{Request = request};
             request.BeginGetResponse(GetDirectoryListingCallback, ftpstate);
         }
@@ -45,17 +52,25 @@ namespace SimpleFTP.Core.Ftp
         {
             var state = (FtpState) asyncResult.AsyncState;
             var content = new List<FileSystemItem>();
-            using (var stream = state.Request.EndGetResponse(asyncResult))
+            try
             {
-                using (var streamReader = new StreamReader(stream.GetResponseStream()))
+                using (var stream = state.Request.EndGetResponse(asyncResult))
                 {
-                    while (!streamReader.EndOfStream)
+                    using (var streamReader = new StreamReader(stream.GetResponseStream()))
                     {
-                        var name = streamReader.ReadLine();
-                        content.Add(new FileSystemItem {Name = name});
+                        while (!streamReader.EndOfStream)
+                        {
+                            var name = streamReader.ReadLine();
+                            var ext = Path.GetExtension(name);
+                            content.Add(new FileSystemItem {Name = name, Extension = ext, IsDirectory = string.IsNullOrEmpty(ext)});
+                        }
                     }
+                    OnListingDirectoryReceived(content, state.Request.RequestUri.AbsolutePath);
                 }
-                OnListingDirectoryReceived(content, state.Request.RequestUri.AbsolutePath);
+            }
+            catch (Exception exception)
+            {
+                OnEror(exception);
             }
         }
     }

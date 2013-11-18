@@ -11,22 +11,25 @@ namespace SimpleFTP
 {
     public partial class MainWindow : Form
     {
-        private const string ParentDirectory = "..";
         private static string CurrentLocalPath { get; set; }
         private static string CurrentRemotePath { get; set; }
 
         private readonly IFtpClient _client;
         private readonly IFileSystemHelper _fsHelper;
         private readonly Settings _appSettings;
-
         public MainWindow()
         {
             _fsHelper = AppConfigurator.Instance.Resolve<IFileSystemHelper>();
             _client = AppConfigurator.Instance.Resolve<IFtpClient>();
             _appSettings = Settings.Default;
             _client.ListingDirectoryReceived += ClientOnListingDirectoryReceived;
-            
+            _client.Eror += ClientOnEror;
             InitializeComponent();
+        }
+
+        private static void ClientOnEror(Exception exception)
+        {
+            ShowErrorAlert(exception.Message);
         }
 
         private void ClientOnListingDirectoryReceived(List<FileSystemItem> items, string path)
@@ -43,14 +46,32 @@ namespace SimpleFTP
                 : _fsHelper.TrimPath(AppDomain.CurrentDomain.BaseDirectory);
             serverUriTextBox.Text = _appSettings.LatestServerUri;
             userNameTextBox.Text = _appSettings.LatestUsername;
-            PopulateLocalFilesFromCurrentPath(CurrentLocalPath);
+            NavigatetoLocalPath(CurrentLocalPath);
         }
 
-        private void PopulateLocalFilesFromCurrentPath(string path)
+        private void NavigatetoLocalPath(string path)
         {
-            CurrentLocalPath = path;
-            var items = _fsHelper.GetFolderContent(CurrentLocalPath);
-            PopulateFilesList(localFilesList, items);
+            try
+            {
+                var items = _fsHelper.GetFolderContent(path);
+                PopulateFilesList(localFilesList, items);
+                CurrentLocalPath = path;
+            }
+            catch (Exception exception)
+            {
+                ShowErrorAlert(exception.Message);
+            }
+        }
+        private void NavigatetoRemotePath(string path)
+        {
+            try
+            {
+                _client.GetDirectoryListing(path);
+            }
+            catch (Exception exception)
+            {
+                ShowErrorAlert(exception.Message);
+            }
         }
 
         private static void PopulateFilesList(ListView listview, IEnumerable<FileSystemItem> items)
@@ -73,14 +94,17 @@ namespace SimpleFTP
             }
         }
 
+
         private void connectButton_Click(object sender, EventArgs e)
         {
             try
             {
                 _client.Connect(userNameTextBox.Text, passwordTextBox.Text, serverUriTextBox.Text);
+                _client.ListingDirectoryReceived += ClientOnFirstListingDirectoryReceived;
+                topToolStrip.Enabled = false;
+                remoteFilesList.Items.Clear();
+                remoteFilesList.Enabled = false;
                 _client.GetDirectoryListing();
-                disconnectButton.Visible = true;
-                connectButton.Visible = false;
             }
             catch (Exception exception)
             {
@@ -89,38 +113,57 @@ namespace SimpleFTP
             
         }
 
-        private static void ShowErrorAlert(string message)
+        private void ClientOnFirstListingDirectoryReceived(List<FileSystemItem> fileSystemItems, string s)
         {
-            MessageBox.Show(message, Resources.ErrorAlert_Header, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _client.ListingDirectoryReceived -= ClientOnFirstListingDirectoryReceived;
+            CurrentRemotePath = string.Empty;
+            topToolStrip.BeginInvoke(new Action(() =>
+            {
+                topToolStrip.Enabled = true;
+                disconnectButton.Visible = true;
+                connectButton.Visible = false;
+            }));
+
+            remoteFilesList.BeginInvoke(new Action(() => remoteFilesList.Enabled = true));
         }
+
 
         private void disconnectButton_Click(object sender, EventArgs e)
         {
             var confirmResult =  MessageBox.Show(Resources.DisconnectConfirmation_Text, Resources.DisconnectConfirmation_Header, MessageBoxButtons.YesNo);
             if (confirmResult != DialogResult.Yes) return;
-            userNameTextBox.Text = string.Empty;
             passwordTextBox.Text = string.Empty;
-            serverUriTextBox.Text = string.Empty;
             disconnectButton.Visible = false;
             connectButton.Visible = true;
             remoteFilesList.Items.Clear();
-            CurrentRemotePath = string.Empty;
+        }
+
+        private static void ShowErrorAlert(string message)
+        {
+            MessageBox.Show(message, Resources.ErrorAlert_Header, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void localFilesList_DoubleClick(object sender, EventArgs e)
         {
-            if (localFilesList.SelectedItems.Count <= 0) return;
-            var item = localFilesList.SelectedItems[0];
-            var tag = item.Tag as FileSystemItem;
+            var tag = GetListViewFileItem(sender);
             if (tag == null) return;
             if (tag.IsParentNavigation)
             {
-                PopulateLocalFilesFromCurrentPath(Directory.GetParent(CurrentLocalPath).FullName);
+                NavigatetoLocalPath(Directory.GetParent(CurrentLocalPath).FullName);
             }
             else if (tag.IsDirectory)
             {
-                PopulateLocalFilesFromCurrentPath(Path.Combine(CurrentLocalPath, tag.Name));
+                NavigatetoLocalPath(Path.Combine(CurrentLocalPath, tag.Name));
             }
+        }
+
+        private static FileSystemItem GetListViewFileItem(object sender)
+        {
+            var listView = sender as ListView;
+            if (listView == null) return null;
+            if (listView.SelectedItems.Count <= 0) return null;
+            var item = listView.SelectedItems[0];
+            return item.Tag as FileSystemItem;
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -129,6 +172,20 @@ namespace SimpleFTP
             _appSettings.LatestServerUri = serverUriTextBox.Text;
             _appSettings.LatestUsername = userNameTextBox.Text;
             _appSettings.Save();
+        }
+
+        private void remoteFilesList_DoubleClick(object sender, EventArgs e)
+        {
+            var tag = GetListViewFileItem(sender);
+            if (tag == null) return;
+            if (tag.IsParentNavigation)
+            {
+                NavigatetoLocalPath(Directory.GetParent(CurrentLocalPath).FullName);
+            }
+            else if (tag.IsDirectory)
+            {
+                NavigatetoLocalPath(Path.Combine(CurrentLocalPath, tag.Name));
+            }
         }
     }
 }

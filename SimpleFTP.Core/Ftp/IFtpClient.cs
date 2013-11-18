@@ -6,9 +6,10 @@ namespace SimpleFTP.Core.Ftp
 {
     public interface IFtpClient
     {
-        void Connect(string userName, string password, string serverUri, bool enableSsl = true);
+        void Connect(string userName, string password, string host, bool enableSsl = true);
         void GetDirectoryListing(string currentPath = "/");
 
         event Action<List<FileSystemItem>, string> ListingDirectoryReceived;
+        event Action<Exception> Eror;
     }
 }

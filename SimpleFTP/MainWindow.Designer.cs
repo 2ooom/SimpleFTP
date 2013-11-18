@@ -34,12 +34,12 @@
             this.nameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.extensionColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.sizeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.downloadBtn = new System.Windows.Forms.Button();
             this.remoteFilesList = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.downloadBtn = new System.Windows.Forms.Button();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.transferStrip = new System.Windows.Forms.StatusStrip();
             this.transferProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.transferProgressLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.transferRateLabelText = new System.Windows.Forms.ToolStripStatusLabel();
@@ -48,7 +48,7 @@
             this.estimatedTimeValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.sytesTransveredTest = new System.Windows.Forms.ToolStripStatusLabel();
             this.bytesTransfferedValue = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.topToolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.serverUriTextBox = new System.Windows.Forms.ToolStripTextBox();
@@ -61,29 +61,27 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.disconnectButton = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.mainLayout.SuspendLayout();
-            this.statusStrip.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.transferStrip.SuspendLayout();
+            this.topToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainLayout
             // 
-            this.mainLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.mainLayout.ColumnCount = 3;
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42F));
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42F));
             this.mainLayout.Controls.Add(this.localFilesList, 0, 0);
-            this.mainLayout.Controls.Add(this.remoteFilesList, 2, 0);
             this.mainLayout.Controls.Add(this.downloadBtn, 1, 0);
-            this.mainLayout.Location = new System.Drawing.Point(0, 25);
+            this.mainLayout.Controls.Add(this.remoteFilesList, 2, 0);
+            this.mainLayout.Location = new System.Drawing.Point(0, 24);
             this.mainLayout.Margin = new System.Windows.Forms.Padding(0);
             this.mainLayout.Name = "mainLayout";
             this.mainLayout.RowCount = 1;
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainLayout.Size = new System.Drawing.Size(730, 317);
+            this.mainLayout.Size = new System.Drawing.Size(730, 318);
             this.mainLayout.TabIndex = 1;
             // 
             // localFilesList
@@ -96,10 +94,10 @@
             this.extensionColumn,
             this.sizeColumn});
             this.localFilesList.FullRowSelect = true;
-            this.localFilesList.GridLines = true;
             this.localFilesList.Location = new System.Drawing.Point(3, 3);
+            this.localFilesList.MultiSelect = false;
             this.localFilesList.Name = "localFilesList";
-            this.localFilesList.Size = new System.Drawing.Size(300, 311);
+            this.localFilesList.Size = new System.Drawing.Size(300, 312);
             this.localFilesList.TabIndex = 0;
             this.localFilesList.UseCompatibleStateImageBehavior = false;
             this.localFilesList.View = System.Windows.Forms.View.Details;
@@ -108,7 +106,7 @@
             // nameColumn
             // 
             this.nameColumn.Text = "Name";
-            this.nameColumn.Width = 160;
+            this.nameColumn.Width = 179;
             // 
             // extensionColumn
             // 
@@ -120,6 +118,16 @@
             this.sizeColumn.Text = "Size";
             this.sizeColumn.Width = 50;
             // 
+            // downloadBtn
+            // 
+            this.downloadBtn.Location = new System.Drawing.Point(316, 20);
+            this.downloadBtn.Margin = new System.Windows.Forms.Padding(10, 20, 10, 10);
+            this.downloadBtn.Name = "downloadBtn";
+            this.downloadBtn.Size = new System.Drawing.Size(96, 23);
+            this.downloadBtn.TabIndex = 2;
+            this.downloadBtn.Text = "<< Download";
+            this.downloadBtn.UseVisualStyleBackColor = true;
+            // 
             // remoteFilesList
             // 
             this.remoteFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -130,18 +138,19 @@
             this.columnHeader2,
             this.columnHeader3});
             this.remoteFilesList.FullRowSelect = true;
-            this.remoteFilesList.GridLines = true;
             this.remoteFilesList.Location = new System.Drawing.Point(425, 3);
+            this.remoteFilesList.MultiSelect = false;
             this.remoteFilesList.Name = "remoteFilesList";
-            this.remoteFilesList.Size = new System.Drawing.Size(302, 311);
-            this.remoteFilesList.TabIndex = 1;
+            this.remoteFilesList.Size = new System.Drawing.Size(302, 312);
+            this.remoteFilesList.TabIndex = 0;
             this.remoteFilesList.UseCompatibleStateImageBehavior = false;
             this.remoteFilesList.View = System.Windows.Forms.View.Details;
+            this.remoteFilesList.DoubleClick += new System.EventHandler(this.remoteFilesList_DoubleClick);
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 160;
+            this.columnHeader1.Width = 179;
             // 
             // columnHeader2
             // 
@@ -153,19 +162,9 @@
             this.columnHeader3.Text = "Size";
             this.columnHeader3.Width = 50;
             // 
-            // downloadBtn
+            // transferStrip
             // 
-            this.downloadBtn.Location = new System.Drawing.Point(316, 20);
-            this.downloadBtn.Margin = new System.Windows.Forms.Padding(10, 20, 10, 10);
-            this.downloadBtn.Name = "downloadBtn";
-            this.downloadBtn.Size = new System.Drawing.Size(96, 23);
-            this.downloadBtn.TabIndex = 2;
-            this.downloadBtn.Text = "<< Download";
-            this.downloadBtn.UseVisualStyleBackColor = true;
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.transferStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.transferProgressBar,
             this.transferProgressLabel,
             this.transferRateLabelText,
@@ -174,11 +173,12 @@
             this.estimatedTimeValue,
             this.sytesTransveredTest,
             this.bytesTransfferedValue});
-            this.statusStrip.Location = new System.Drawing.Point(0, 342);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(730, 24);
-            this.statusStrip.TabIndex = 3;
-            this.statusStrip.Text = "statusStrip1";
+            this.transferStrip.Location = new System.Drawing.Point(0, 342);
+            this.transferStrip.Name = "transferStrip";
+            this.transferStrip.Size = new System.Drawing.Size(730, 24);
+            this.transferStrip.TabIndex = 3;
+            this.transferStrip.Text = "statusBar";
+            this.transferStrip.Visible = false;
             // 
             // transferProgressBar
             // 
@@ -238,10 +238,10 @@
             this.bytesTransfferedValue.Size = new System.Drawing.Size(62, 19);
             this.bytesTransfferedValue.Text = "1024 bytes";
             // 
-            // toolStrip1
+            // topToolStrip
             // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.topToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.topToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
             this.toolStripLabel1,
             this.serverUriTextBox,
@@ -254,11 +254,12 @@
             this.toolStripSeparator3,
             this.connectButton,
             this.disconnectButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(730, 25);
-            this.toolStrip1.TabIndex = 4;
-            this.toolStrip1.Text = "toolStrip1";
+            this.topToolStrip.Location = new System.Drawing.Point(0, 24);
+            this.topToolStrip.Name = "topToolStrip";
+            this.topToolStrip.Size = new System.Drawing.Size(730, 25);
+            this.topToolStrip.TabIndex = 4;
+            this.topToolStrip.Text = "toolStrip1";
+            this.topToolStrip.Visible = false;
             // 
             // toolStripLabel2
             // 
@@ -276,7 +277,7 @@
             // serverUriTextBox
             // 
             this.serverUriTextBox.Name = "serverUriTextBox";
-            this.serverUriTextBox.Size = new System.Drawing.Size(100, 25);
+            this.serverUriTextBox.Size = new System.Drawing.Size(150, 25);
             // 
             // toolStripSeparator1
             // 
@@ -338,23 +339,32 @@
             this.disconnectButton.Visible = false;
             this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Location = new System.Drawing.Point(0, 344);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(730, 22);
+            this.statusStrip.TabIndex = 5;
+            this.statusStrip.Text = "statusStrip1";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(730, 366);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.topToolStrip);
+            this.Controls.Add(this.transferStrip);
             this.Controls.Add(this.mainLayout);
             this.Name = "MainWindow";
             this.Text = "Simple FTP";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.mainLayout.ResumeLayout(false);
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.transferStrip.ResumeLayout(false);
+            this.transferStrip.PerformLayout();
+            this.topToolStrip.ResumeLayout(false);
+            this.topToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -363,15 +373,11 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel mainLayout;
-        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.StatusStrip transferStrip;
         private System.Windows.Forms.ListView localFilesList;
         private System.Windows.Forms.ColumnHeader nameColumn;
         private System.Windows.Forms.ColumnHeader extensionColumn;
         private System.Windows.Forms.ColumnHeader sizeColumn;
-        private System.Windows.Forms.ListView remoteFilesList;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.Button downloadBtn;
         private System.Windows.Forms.ToolStripProgressBar transferProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel transferProgressLabel;
@@ -381,7 +387,7 @@
         private System.Windows.Forms.ToolStripStatusLabel estimatedTimeValue;
         private System.Windows.Forms.ToolStripStatusLabel sytesTransveredTest;
         private System.Windows.Forms.ToolStripStatusLabel bytesTransfferedValue;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip topToolStrip;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripTextBox serverUriTextBox;
@@ -394,6 +400,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton connectButton;
         private System.Windows.Forms.ToolStripButton disconnectButton;
+        private System.Windows.Forms.ListView remoteFilesList;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.StatusStrip statusStrip;
     }
 }
 
