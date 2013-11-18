@@ -9,6 +9,6 @@ namespace SimpleFTP.Core.Ftp
         void Connect(string userName, string password, string serverUri, bool enableSsl = true);
         void GetDirectoryListing(string currentPath = "/");
 
-        event Action<List<FilySystemItem>, string> ListingDirectoryReceived;
+        event Action<List<FileSystemItem>, string> ListingDirectoryReceived;
     }
 }

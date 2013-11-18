@@ -49,9 +49,9 @@
             this.sytesTransveredTest = new System.Windows.Forms.ToolStripStatusLabel();
             this.bytesTransfferedValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.serverUriTextBox = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.userNameTextBox = new System.Windows.Forms.ToolStripTextBox();
@@ -103,6 +103,7 @@
             this.localFilesList.TabIndex = 0;
             this.localFilesList.UseCompatibleStateImageBehavior = false;
             this.localFilesList.View = System.Windows.Forms.View.Details;
+            this.localFilesList.DoubleClick += new System.EventHandler(this.localFilesList_DoubleClick);
             // 
             // nameColumn
             // 
@@ -259,6 +260,12 @@
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(45, 22);
+            this.toolStripLabel2.Text = "Server: ";
+            // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
@@ -270,12 +277,6 @@
             // 
             this.serverUriTextBox.Name = "serverUriTextBox";
             this.serverUriTextBox.Size = new System.Drawing.Size(100, 25);
-            // 
-            // toolStripLabel2
-            // 
-            this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(45, 22);
-            this.toolStripLabel2.Text = "Server: ";
             // 
             // toolStripSeparator1
             // 

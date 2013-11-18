@@ -12,11 +12,11 @@ namespace SimpleFTP.Core.Ftp
         public string Password { get; private set; }
         public string ServerUri { get; private set; }
         public bool EnableSsl { get; private set; }
-        public event Action<List<FilySystemItem>, string> ListingDirectoryReceived;
+        public event Action<List<FileSystemItem>, string> ListingDirectoryReceived;
 
-        protected virtual void OnListingDirectoryReceived(List<FilySystemItem> fileItems, string path)
+        protected virtual void OnListingDirectoryReceived(List<FileSystemItem> fileItems, string path)
         {
-            Action<List<FilySystemItem>, string> handler = ListingDirectoryReceived;
+            Action<List<FileSystemItem>, string> handler = ListingDirectoryReceived;
             if (handler != null) handler(fileItems, path);
         }
 
@@ -44,7 +44,7 @@ namespace SimpleFTP.Core.Ftp
         private void GetDirectoryListingCallback(IAsyncResult asyncResult)
         {
             var state = (FtpState) asyncResult.AsyncState;
-            var content = new List<FilySystemItem>();
+            var content = new List<FileSystemItem>();
             using (var stream = state.Request.EndGetResponse(asyncResult))
             {
                 using (var streamReader = new StreamReader(stream.GetResponseStream()))
@@ -52,7 +52,7 @@ namespace SimpleFTP.Core.Ftp
                     while (!streamReader.EndOfStream)
                     {
                         var name = streamReader.ReadLine();
-                        content.Add(new FilySystemItem {Name = name});
+                        content.Add(new FileSystemItem {Name = name});
                     }
                 }
                 OnListingDirectoryReceived(content, state.Request.RequestUri.AbsolutePath);

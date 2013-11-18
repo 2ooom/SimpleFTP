@@ -10,23 +10,23 @@ namespace SimpleFTP.Core.FileSystem
         public static string RootPath = ".";
         public static string DriveRootPath = "/";
         public static string ParentFolder = "..";
-        public List<FilySystemItem> GetFolderContent(string path)
+        public List<FileSystemItem> GetFolderContent(string path)
         {
             // looking for root path
             if (string.IsNullOrEmpty(path) || path == RootPath)
             {
-                return Directory.GetLogicalDrives().Select(t => new FilySystemItem {Name = t, IsDrive = true}).ToList();
+                return Directory.GetLogicalDrives().Select(t => new FileSystemItem {Name = t, IsDrive = true}).ToList();
             }
             var curentDirectory  = new DirectoryInfo(path);
             var directories = curentDirectory.GetDirectories()
-                .Select(t => new FilySystemItem
+                .Select(t => new FileSystemItem
                 {
                     Name = t.Name,
                     IsDirectory = true,
                 });
 
             var files = curentDirectory.GetFiles()
-                .Select(t => new FilySystemItem
+                .Select(t => new FileSystemItem
                 {
                     Name = t.Name,
                     Extension = t.Extension,
