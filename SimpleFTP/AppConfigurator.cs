@@ -19,7 +19,6 @@ namespace SimpleFTP
         {
             return Container.Resolve<T>();
         }
-
         private void RegisterComponents()
         {
             var builder = new ContainerBuilder();

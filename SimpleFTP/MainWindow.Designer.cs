@@ -348,6 +348,7 @@
             this.Controls.Add(this.mainLayout);
             this.Name = "MainWindow";
             this.Text = "Simple FTP";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.mainLayout.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -7,13 +6,10 @@ namespace SimpleFTP.Core.FileSystem
 {
     public class FileSystemHelper : IFileSystemHelper
     {
-        public static string RootPath = ".";
-        public static string DriveRootPath = "/";
-        public static string ParentFolder = "..";
         public List<FileSystemItem> GetFolderContent(string path)
         {
             // looking for root path
-            if (string.IsNullOrEmpty(path) || path == RootPath)
+            if (string.IsNullOrEmpty(path))
             {
                 return Directory.GetLogicalDrives().Select(t => new FileSystemItem {Name = t, IsDrive = true}).ToList();
             }
@@ -32,10 +28,19 @@ namespace SimpleFTP.Core.FileSystem
                     Extension = t.Extension,
                     Size = GetFileSize(t.Length),
                 });
-            return directories.Union(files).ToList();
+            var result = directories.Union(files).ToList();
+            if (Directory.GetParent(path) != null)
+            {
+                result.Insert(0, new FileSystemItem { IsParentNavigation = true });
+            }
+            return result;
         }
 
-        public static string GetFileSize(long bytesLength)
+        public string TrimPath(string path)
+        {
+            return path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+        public string GetFileSize(long bytesLength)
         {
             string[] sizes = { "B", "KB", "MB", "GB" };
             var order = 0;
@@ -44,9 +49,6 @@ namespace SimpleFTP.Core.FileSystem
                 order++;
                 bytesLength = bytesLength / 1024;
             }
-
-            // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
-            // show a single decimal place, and no space.
             return string.Format("{0:0.##} {1}", bytesLength, sizes[order]);
         }
     }
